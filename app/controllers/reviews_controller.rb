@@ -21,10 +21,12 @@ class ReviewsController < ApplicationController
   def edit
   end
 
- def create
-     @review = Review.new(review_params)
-     @review.user_id = current_user.id
-     respond_with(@review)
+  def create 
+  @review = Review.new(review_params) 
+  @review.user_id = current_user.id 
+
+  flash[:notice] = "Review was successfully created." if @review.save 
+  respond_with(@review, :location => root_path) 
   end
 
 
