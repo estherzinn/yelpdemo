@@ -1,6 +1,8 @@
 class ReviewsController < ApplicationController
-   before_action :set_review, only: [:show, :edit, :update, :destroy]
-   before_action :authenticate_user!
+  before_action :set_review, only: [:edit, :update, :destroy]
+  before_action :set_restaurant
+  before_action :authenticate_user!
+  before_action :check_user, only: [:edit, :update, :destroy]
 
   respond_to :html
 
@@ -21,9 +23,10 @@ class ReviewsController < ApplicationController
   def edit
   end
 
-  def create 
-  @review = Review.new(review_params) 
-  @review.user_id = current_user.id 
+  def create
+    @review = Review.new(review_params)
+    @review.user_id = current_user.id
+    @review.restaurant_id = @restaurant.id
 
   flash[:notice] = "Review was successfully created." if @review.save 
   respond_with(@review, :location => root_path) 
@@ -47,5 +50,9 @@ class ReviewsController < ApplicationController
 
     def review_params
       params.require(:review).permit(:rating, :comment)
+    end
+
+    def set_restaurant
+      @restaurant = Restaurant.find(params[:restaurant_id])
     end
 end
