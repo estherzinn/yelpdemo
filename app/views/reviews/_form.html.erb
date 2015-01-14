@@ -1,4 +1,6 @@
 <%= form_for([@restaurant, @review]) do |f| %>
+
+  <div id="star-rating"></div>
   <% if @review.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@review.errors.count, "error") %> prohibited this review from being saved:</h2>
@@ -12,10 +14,7 @@
     </div>
   <% end %>
 
-  <div class="form-group">
-    <%= f.label :rating %>
-    <%= f.number_field :rating, class: "form-control" %>
-  </div>
+ 
   <div class="form-group">
     <%= f.label :comment %>
     <%= f.text_area :comment, class: "form-control" %>
@@ -23,4 +22,12 @@
   <div class="form-group">
     <%= f.submit class: "btn btn-primary"%>
   </div>
+
 <% end %>
+
+<script>
+  $('#star-rating').raty({
+    path: 'https://s3.amazonaws.com/yelpdemo-z/stars',
+    scoreName: 'review[rating]'
+  });
+</script>
