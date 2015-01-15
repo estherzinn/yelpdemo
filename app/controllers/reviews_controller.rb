@@ -40,7 +40,7 @@ class ReviewsController < ApplicationController
 
   def destroy
     @review.destroy
-    respond_with(@review)
+    respond_with(@restaurant)
   end
 
   private
@@ -54,5 +54,11 @@ class ReviewsController < ApplicationController
 
     def set_restaurant
       @restaurant = Restaurant.find(params[:restaurant_id])
+    end
+
+    def check_user
+      unless (@review.user == current_user) || (current_user.admin?)
+        redirect_to root_url, alert: "Sorry, this review belongs to someone else"
+      end
     end
 end
