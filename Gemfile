@@ -33,6 +33,8 @@ gem 'mini_magick'
 
 gem 'devise'
 
+gem 'searchkick'
+
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0',          group: :doc
 
