@@ -30,7 +30,6 @@ ActiveRecord::Schema.define(version: 20150115112728) do
     t.datetime "updated_at"
     t.integer  "user_id"
     t.string   "restaurant_id"
-    t.string   "integer"
   end
 
   create_table "users", force: true do |t|
@@ -55,3 +54,4 @@ ActiveRecord::Schema.define(version: 20150115112728) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
 
 end
+
