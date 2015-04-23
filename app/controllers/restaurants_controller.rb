@@ -1,7 +1,15 @@
 class RestaurantsController < ApplicationController
   before_action :set_restaurant, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_user!, except: [:index, :show]
-  before_action :check_user, except: [:search, :index, :show]
+  before_action :authenticate_user!, except: [:search, :index, :show]
+  before_action :check_user, except: [:search,  :index, :show]
+
+  def search
+    if params[:search].present?
+      @restaurants = Restaurant.search(params[:search])
+    else
+      @restaurants = Restaurant.all
+    end
+  end
 
   # GET /restaurants
   # GET /restaurants.json
@@ -31,11 +39,17 @@ class RestaurantsController < ApplicationController
 
   # POST /restaurants
   # POST /restaurants.json
-    def search
-    if params[:search].present?
-      @restaurants = Restaurant.search(params[:search])
-    else
-      @restaurants = Restaurant.all
+  def create
+    @restaurant = Restaurant.new(restaurant_params)
+
+    respond_to do |format|
+      if @restaurant.save
+        format.html { redirect_to @restaurant, notice: 'Restaurant was successfully created.' }
+        format.json { render :show, status: :created, location: @restaurant }
+      else
+        format.html { render :new }
+        format.json { render json: @restaurant.errors, status: :unprocessable_entity }
+      end
     end
   end
 
@@ -73,9 +87,9 @@ class RestaurantsController < ApplicationController
       unless current_user.admin?
         redirect_to root_url, alert: "Sorry, only admins can do that!"
       end
-     end
+    end
 
-   # Never trust parameters from the scary internet, only allow the white list through.
+    # Never trust parameters from the scary internet, only allow the white list through.
     def restaurant_params
       params.require(:restaurant).permit(:name, :address, :phone, :website, :image)
     end
